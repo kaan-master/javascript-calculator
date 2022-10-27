@@ -1,123 +1,124 @@
-let result = document.getElementById("result").innerHTML = "";
- 
-function One()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "1" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
+class Calculator{ 
+constructor(previousOperandTextElement , currentOperandTextElement){
+this.previousOperandTextElement = previousOperandTextElement
+this.currentOperandTextElement = currentOperandTextElement
+this.clear()
 }
 
-function Two()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "2" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
+    clear(){
+    this.currentOperand = ''
+    this.previousOperand = ''
+    this.operation = undefined
+    }
+    delete(){ 
+        this.currentOperand = this.currentOperand.toString().slice(0, -1)
+    }
+    appendNumber(number) { 
+        if (number === '.' && this.currentOperand.includes(".")) return
+        this.currentOperand = this.currentOperand.toString() + number.toString()
+
+    }
+    chooseOperation(operation){ 
+        if (this.currentOperand === '') return
+        if (this.previousOperand !== '') {
+            this.compute()
+        }
+        this.operation = operation
+        this.previousOperand = this.currentOperand
+        this.currentOperand = ''
+    }
+
+    compute(){ 
+    let computation
+    const prev = parseFloat(this.previousOperand)
+    const current = parseFloat(this.currentOperand)
+    if (isNaN(prev) || isNaN(current)) return
+    switch (this.operation) { 
+        case '+':
+            computation = prev + current
+            break
+        case '-':
+            computation = prev - current
+            break
+        case '*':
+            computation = prev * current
+            break
+        case ':':
+            computation = prev / current
+            break
+        default:
+            return
+         }
+     this.currentOperand = computation
+     this.operation = undefined
+     this.previousOperand = ''
+    }
+
+getDisplayNumber(number){ 
+    const stringNumber = number.toString()
+    const integerDigits = parseFloat(stringNumber.split(".")[0])
+    const decimalDigits = stringNumber.split(".")[1]
+
+   let integerDisplay
+   if (isNaN(integerDigits)) { 
+    integerDisplay = ''
+   } else {
+   integerDisplay = integerDigits.toLocaleString('en', {
+    maximumFractionDigits: 0})
+   }
+   if (decimalDigits != null){ 
+    return `${integerDisplay}.${decimalDigits}`
+   } else { 
+    return integerDisplay
+   }
 }
 
-function Three()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "3" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
+    updateDisplay(){ 
+        this.currentOperandTextElement.innerText = 
+        this.getDisplayNumber(this.currentOperand)
+        if(this.operation != null){ 
+            this.previousOperandTextElement.innerText = 
+            `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`
+        } else { 
+            this.previousOperandTextElement.innerText = ''
+        }
+    }
 }
 
+const numberButtons = document.querySelectorAll('[data-number]')
+const operationButtons = document.querySelectorAll('[data-operation]')
+const equalsButton = document.querySelector('[data-equals]')
+const deleteButton = document.querySelector('[data-delete]')
+const allClearButton = document.querySelector('[data-all-clear]')
+const previousOperandTextElement = document.querySelector('[data-previous-operand]')
+const currentOperandTextElement= document.querySelector('[data-current-operand]')
 
-function Four()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "4" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
+const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
 
-function Five()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "5" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
-function Six()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "6" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
-function Seven()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "7" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
-function Eight()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "8" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
-function Nine()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "9" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
+numberButtons.forEach(button => {
+    button.addEventListener('click', () => { 
+        calculator.appendNumber(button.innerText)
+        calculator.updateDisplay()
+    })
+} )
+operationButtons.forEach(button => {
+    button.addEventListener('click', () => { 
+        calculator.chooseOperation(button.innerText)
+        calculator.updateDisplay()
 
-function Zero()
-{ 
-    if (result = !document.getElementById("result").innerHTML < 1){
-        let result = document.getElementById("result").innerHTML += "0" ;
-        console.log("True")
-    } 
-        else{ 
-            let result = document.getElementById("result").innerHTML = 1 ;
-            console.log("False")
-                }
-}
+    })
+})
 
-function reset()
-{ 
-    let result = document.getElementById("result").innerHTML = "";
-}
+equalsButton.addEventListener('click', button => { 
+ calculator.compute()
+ calculator.updateDisplay()    
+})
+
+allClearButton.addEventListener('click', button => { 
+    calculator.clear()
+    calculator.updateDisplay()    
+   })
+   deleteButton.addEventListener('click', button => { 
+    calculator.delete()
+    calculator.updateDisplay()    
+   })
